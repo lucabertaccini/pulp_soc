@@ -122,4 +122,4 @@ register_interface:
   domain: [soc]
 dummy_vip:
   commit: master
-  group: luca.bertaccini
+  group: lucabertaccini
