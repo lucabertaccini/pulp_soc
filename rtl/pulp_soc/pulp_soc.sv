@@ -413,6 +413,13 @@ module pulp_soc import dm::*; #(
         .AXI_USER_WIDTH ( AXI_USER_WIDTH    )
     ) s_data_out_bus ();
 
+    AXI_BUS #(
+        .AXI_ADDR_WIDTH ( AXI_ADDR_WIDTH    ),
+        .AXI_DATA_WIDTH ( AXI_DATA_OUT_WIDTH),
+        .AXI_ID_WIDTH   ( AXI_ID_OUT_WIDTH  ),
+        .AXI_USER_WIDTH ( AXI_USER_WIDTH    )
+    ) wide_alu_axi ();
+
     //assign s_data_out_bus.aw_atop = 6'b0;
 
     FLL_BUS #(
@@ -800,6 +807,7 @@ module pulp_soc import dm::*; #(
         .tcdm_hwpe             ( s_lint_hwpe_bus     ),
         .axi_master_plug       ( s_data_in_bus       ),
         .axi_slave_plug        ( s_data_out_bus      ),
+        .axi_wide_alu_slave_plug        ( wide_alu_axi        ),
         .apb_peripheral_bus    ( s_apb_periph_bus    ),
         .l2_interleaved_slaves ( s_mem_l2_bus        ),
         .l2_private_slaves     ( s_mem_l2_pri_bus    ),
@@ -1097,5 +1105,13 @@ module pulp_soc import dm::*; #(
     assign data_master_b_readpointer_o  = s_data_master.b_readpointer ;
 
     // dummy_top i_dummy_module();
+
+    wide_alu_top i_wide_alu_top
+        (
+          .clk_i,
+          .rst_ni,
+          .test_mode_i  ( 1'b1         ),
+          .axi_wide_alu ( wide_alu_axi )
+        );
 
 endmodule
